@@ -29,7 +29,7 @@ func TestRootServesHTMLWithGIFs(t *testing.T) {
 	}
 }
 
-func TestIssue3PreferredGIFIsShownForSingleGIFPage(t *testing.T) {
+func TestIssue4PreferredGIFIsIncludedInRandomSelection(t *testing.T) {
 	h := newHandler()
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rr := httptest.NewRecorder()
@@ -39,8 +39,8 @@ func TestIssue3PreferredGIFIsShownForSingleGIFPage(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Fatalf("status = %d, want %d", rr.Code, http.StatusOK)
 	}
-	if !strings.Contains(rr.Body.String(), "Cat%20Freakout.gif") {
-		t.Fatalf("body = %q, want preferred Cat Freakout GIF", rr.Body.String())
+	if !strings.Contains(rr.Body.String(), "Dog%20Car%20Mirror%20Freak.gif") {
+		t.Fatalf("body = %q, want preferred Dog Car Mirror Freak GIF", rr.Body.String())
 	}
 }
 

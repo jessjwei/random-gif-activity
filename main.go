@@ -17,6 +17,7 @@ type pageData struct {
 }
 
 const issue3GIF = "https://s3.amazonaws.com/files.656.mba/mgt656/fall-2026/random-gifs/adorbs/Cat%20Freakout.gif"
+const issue4GIF = "https://s3.amazonaws.com/files.656.mba/mgt656/fall-2026/random-gifs/adorbs/Dog%20Car%20Mirror%20Freak.gif"
 
 var pageTemplate = template.Must(template.New("page").Parse(`<!DOCTYPE html>
 <html lang="en">
@@ -67,7 +68,7 @@ var pageTemplate = template.Must(template.New("page").Parse(`<!DOCTYPE html>
 func newHandler() http.Handler {
 	gifs := preferredGIFs(loadGIFs("gifs.txt"))
 	if len(gifs) == 0 {
-		gifs = []string{issue3GIF}
+		gifs = []string{issue4GIF}
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -115,13 +116,13 @@ func normalizeCount(raw string) int {
 
 func preferredGIFs(gifs []string) []string {
 	if len(gifs) == 0 {
-		return []string{issue3GIF}
+		return []string{issue4GIF}
 	}
 
 	result := make([]string, 0, len(gifs)+1)
-	result = append(result, issue3GIF)
+	result = append(result, issue4GIF)
 	for _, gif := range gifs {
-		if gif == issue3GIF {
+		if gif == issue4GIF {
 			continue
 		}
 		result = append(result, gif)
@@ -134,7 +135,7 @@ func selectGIFs(gifs []string, count int) []string {
 		return nil
 	}
 	if count == 1 {
-		return []string{issue3GIF}
+		return []string{issue4GIF}
 	}
 	if count > len(gifs) {
 		count = len(gifs)
