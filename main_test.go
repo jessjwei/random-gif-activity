@@ -29,6 +29,21 @@ func TestRootServesHTMLWithGIFs(t *testing.T) {
 	}
 }
 
+func TestIssue3PreferredGIFIsShownForSingleGIFPage(t *testing.T) {
+	h := newHandler()
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	rr := httptest.NewRecorder()
+
+	h.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusOK {
+		t.Fatalf("status = %d, want %d", rr.Code, http.StatusOK)
+	}
+	if !strings.Contains(rr.Body.String(), "Cat%20Freakout.gif") {
+		t.Fatalf("body = %q, want preferred Cat Freakout GIF", rr.Body.String())
+	}
+}
+
 func TestQueryCountControlsNumberOfGIFs(t *testing.T) {
 	h := newHandler()
 	req := httptest.NewRequest(http.MethodGet, "/?count=3", nil)
