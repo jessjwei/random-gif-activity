@@ -29,9 +29,9 @@ func TestRootServesHTMLWithGIFs(t *testing.T) {
 	}
 }
 
-func TestIssue4PreferredGIFIsIncludedInRandomSelection(t *testing.T) {
+func TestIssue5UsesTheAdorbsGIFList(t *testing.T) {
 	h := newHandler()
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	req := httptest.NewRequest(http.MethodGet, "/?count=3", nil)
 	rr := httptest.NewRecorder()
 
 	h.ServeHTTP(rr, req)
@@ -39,8 +39,11 @@ func TestIssue4PreferredGIFIsIncludedInRandomSelection(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Fatalf("status = %d, want %d", rr.Code, http.StatusOK)
 	}
-	if !strings.Contains(rr.Body.String(), "Dog%20Car%20Mirror%20Freak.gif") {
-		t.Fatalf("body = %q, want preferred Dog Car Mirror Freak GIF", rr.Body.String())
+	if got := strings.Count(rr.Body.String(), "<img"); got != 3 {
+		t.Fatalf("img count = %d, want 3", got)
+	}
+	if !strings.Contains(rr.Body.String(), "https://s3.amazonaws.com/files.656.mba/mgt656/fall-2026/random-gifs/adorbs/") {
+		t.Fatalf("body = %q, want GIF URLs from the adorbs list", rr.Body.String())
 	}
 }
 
